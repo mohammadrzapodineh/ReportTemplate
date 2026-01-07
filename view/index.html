@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="../asset/bootstrap.min.css" rel="stylesheet">
+<script src="../asset/jquery.min.js"></script>
+<script src="../asset/js/app.js"></script>
+<link rel="stylesheet" href="../asset/css/app.css">
+<link rel="stylesheet" href="../asset/css/my-class.css">
+<link rel="stylesheet" href="../asset/bootstrap-icons.min.css">
+
+<title>تحلیل داده</title>
+
+<style>
+/* ============= DARK DASHBOARD + INTERACTIVE ANIMATIONS ============= */
+
+body {
+    background-color: #0f111a;
+    color: #e5e7eb;
+    font-family: 'IRANYekan', sans-serif;
+}
+
+/* کارت‌ها */
+.dashboard-card {
+    background-color: #1f2233;
+    border: 1px solid #272b45;
+    border-radius: 1rem;
+    transition: all 0.5s ease;
+    perspective: 1000px; /* برای 3D tilt */
+    overflow: hidden;
+}
+
+/* Hover کارت ها: 3D Tilt + Glow + Shadow */
+.dashboard-card:hover {
+    transform: rotateX(2deg) rotateY(-2deg) scale(1.02);
+    box-shadow: 0 25px 50px rgba(99,102,241,0.5);
+}
+
+/* کارت هدر */
+.card-header-custom {
+    background: linear-gradient(135deg, #272b45, #1f2233);
+    border-bottom: 1px solid #3b3f57;
+    padding: 0.75rem 1rem;
+    transition: all 0.4s ease;
+    cursor: pointer;
+}
+
+/* Hover روی هدر: glow */
+.card-header-custom:hover {
+    box-shadow: 0 0 15px rgba(99,102,241,0.6);
+}
+
+/* Page Title */
+.page-title {
+    color: #e5e7eb;
+    letter-spacing: .3px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.page-title::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 3px;
+    margin: 10px auto 0;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #6366f1, #facc15);
+}
+
+/* متن ها */
+.text-ju { text-align: justify; color: #d1d5db; }
+.my-font-IYL { color: #d1d5db; }
+.my-font-IYB { color: #f8fafc; transition: color 0.3s ease; }
+
+/* Feature Items */
+.feature-item {
+    border-bottom: 1px dashed #3b3f57;
+    padding: .5rem 1rem;
+    transition: all 0.4s ease;
+    cursor: pointer;
+}
+.feature-item:hover {
+    transform: translateX(10px) scale(1.05);
+    background-color: #272b45;
+    border-left: 4px solid #6366f1;
+    color: #fff;
+}
+
+/* Badge */
+.badge {
+    font-weight: 500;
+    background-color: #6366f1;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+.feature-item:hover .badge {
+    background-color: #facc15;
+    color: #0f111a;
+}
+
+/* Scroll */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
+::-webkit-scrollbar-track { background: #1f2233; }
+
+/* Icon */
+.bi { transition: all 0.3s ease; }
+.dashboard-card:hover .bi {
+    transform: scale(1.1) rotate(5deg);
+    color: #facc15;
+}
+
+/* Charts Wrapper hover animation */
+.chart-wrapper {
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    border-radius: 1rem;
+}
+.chart-wrapper:hover {
+    transform: scale(1.02);
+    box-shadow: 0 20px 50px rgba(99,102,241,0.4);
+}
+
+/* Collapse Animation */
+.collapse {
+    transition: height 0.5s ease, opacity 0.5s ease;
+}
+.collapse.show {
+    opacity: 1;
+}
+.collapse:not(.show) {
+    opacity: 0;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container-xxl py-4">
+
+    <!-- TITLE -->
+    <div class="row">
+        <div class="col-12 text-center mb-4">
+            <p class="my-font-IYB fs-3 m-0 page-title">نتایج تحلیل داده‌محور</p>
+        </div>
+    </div>
+
+    <div class="row g-3">
+
+        <!-- REPORT -->
+        <div class="col-12 col-md-6">
+            <div class="dashboard-card shadow h-100">
+                <div class="card-header-custom rounded-3" data-bs-toggle="collapse" data-bs-target="#reportContent" aria-expanded="true">
+                    <span class="badge rounded-pill my-font-IYM my-f-9">گزارش</span>
+                    <div class="d-flex align-items-center float-end">
+                        <p class="my-font-IYB my-f-18 m-0 m-2 ps-2" dir="rtl">گزارش پیش بینی قتل ها</p>
+                        <i class="bi bi-chat-fill fs-2 text-primary opacity-75"></i>
+                    </div>
+                </div>
+                <div class="collapse show" id="reportContent">
+                    <div class="overflow-y-scroll p-3 w-100" style="max-height: 260px;">
+                        <p dir="rtl" class="my-font-IYL my-f-13 lh-lg text-ju">
+                            گزارش پیش‌بینی قتل‌ها با هدف تحلیل روندهای آماری، شناسایی الگوهای رفتاری و بررسی عوامل مؤثر بر وقوع جرایم خشونت‌آمیز تهیه شده است...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULT -->
+        <div class="col-12 col-md-6">
+            <div class="dashboard-card shadow h-100">
+                <div class="card-header-custom rounded-3" data-bs-toggle="collapse" data-bs-target="#resultContent" aria-expanded="true">
+                    <span class="badge rounded-pill bg-success my-font-IYM my-f-9">نتیجه‌گیری</span>
+                    <div class="d-flex align-items-center float-end">
+                        <p class="my-font-IYB my-f-18 m-0 ps-2 m-2" dir="rtl">جمع‌بندی تحلیل</p>
+                        <i class="bi bi-check-circle-fill fs-2 text-success opacity-75"></i>
+                    </div>
+                </div>
+                <div class="collapse show" id="resultContent">
+                    <div class="overflow-y-scroll p-3 w-100" style="max-height: 260px;">
+                        <p dir="rtl" class="my-font-IYL my-f-13  lh-lg text-ju">
+                            در نتیجه‌گیری می‌توان گفت که تحلیل و پیش‌بینی قتل‌ها نقش مهمی در درک بهتر الگوهای جرایم خشونت‌آمیز دارد...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FEATURES -->
+        <div class="col-12">
+            <div class="dashboard-card shadow">
+                <div class="d-flex justify-content-between align-items-center mb-3 card-header-custom" data-bs-toggle="collapse" data-bs-target="#featuresContent" aria-expanded="true">
+                    <i class="bi bi-list-check fs-2 text-primary"></i>
+                    <p class="my-font-IYB my-f-18 m-0" dir="rtl">ویژگی‌های تحلیل</p>
+                </div>
+
+                <div class="collapse show" id="featuresContent">
+                    <div class="p-2">
+                        <div class="feature-item d-flex justify-content-between align-items-center">
+                            <span class="badge my-f-9 my-font-IYM">اثرگذار</span>
+                            <p class="m-0 my-f-13 my-font-IYL" dir="rtl">تحلیل روندهای آماری قتل در بازه‌های زمانی مختلف</p>
+                        </div>
+                        <div class="feature-item d-flex justify-content-between align-items-center">
+                            <span class="my-f-9 my-font-IYM badge">اثرگذار</span>
+                            <p class="m-0 my-f-13 my-font-IYL" dir="rtl">شناسایی الگوهای رفتاری و عوامل مؤثر بر جرایم خشونت‌آمیز</p>
+                        </div>
+                        <div class="feature-item d-flex justify-content-between align-items-center">
+                            <span class="my-f-9 my-font-IYM badge">اثرگذار</span>
+                            <p class="m-0 my-f-13 my-font-IYL" dir="rtl">بررسی شاخص‌های اجتماعی، اقتصادی و جمعیتی مرتبط با قتل</p>
+                        </div>
+                        <div class="feature-item d-flex justify-content-between align-items-center">
+                            <span class="my-f-9 my-font-IYM badge">اثرگذار</span>
+                            <p class="m-0 my-f-13 my-font-IYL" dir="rtl">شناسایی مناطق و دوره‌های زمانی پرخطر</p>
+                        </div>
+                        <div class="feature-item d-flex justify-content-between align-items-center">
+                            <span class="my-f-9 my-font-IYM badge">اثرگذار</span>
+                            <p class="m-0 my-f-13 my-font-IYL" dir="rtl">کمک به تصمیم‌گیری داده‌محور برای پیشگیری و تخصیص منابع</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHARTS -->
+        <div class="col-12 col-md-8 chart-wrapper">
+            <div class="dashboard-card shadow">
+                <div class="chart-card-header d-flex justify-content-between align-items-center mb-2 card-header-custom" data-bs-toggle="collapse" data-bs-target="#chart1Content" aria-expanded="true">
+                    <i class="bi bi-bar-chart-fill text-primary fs-4"></i>
+                    <p class="my-font-IYB my-f-16 m-0" dir="rtl">تحلیل عوامل مؤثر</p>
+                </div>
+                <div class="collapse show" id="chart1Content">
+                    <div class="p-3">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4 chart-wrapper">
+            <div class="dashboard-card shadow">
+                <div class="chart-card-header d-flex justify-content-between align-items-center mb-2 card-header-custom" data-bs-toggle="collapse" data-bs-target="#chart2Content" aria-expanded="true">
+                    <i class="bi bi-pie-chart-fill text-primary fs-4"></i>
+                    <p class="my-font-IYB my-f-16 m-0" dir="rtl">سهم عوامل</p>
+                </div>
+                <div class="collapse show" id="chart2Content">
+                    <div class="p-3">
+                        <canvas id="myChart2"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 chart-wrapper">
+            <div class="dashboard-card shadow">
+                <div class="chart-card-header d-flex justify-content-between align-items-center mb-2 card-header-custom" data-bs-toggle="collapse" data-bs-target="#chart3Content" aria-expanded="true">
+                    <i class="bi bi-graph-up-arrow text-primary fs-4"></i>
+                    <p class="my-font-IYB my-f-16 m-0" dir="rtl">روند زمانی قتل‌ها</p>
+                </div>
+                <div class="collapse show" id="chart3Content">
+                    <div class="p-3">
+                        <canvas id="myChart3"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-12 mt-5">
+        <p class="text-center my-color-b-600 my-font-IYM my-f-11 ">نسخه بتا 0.0.1</p>
+    </div>
+</div>
+
+<script src="../asset/js/chart.js"></script>
+<script src="../asset/bootstrap.bundle.min.js"></script>
+
+<script>
+                   const ctx = document.getElementById('myChart');
+
+           new Chart(ctx, {
+               type: 'bar',
+               data: {
+                   labels: [
+                       'عوامل اقتصادی',
+                       'عوامل اجتماعی',
+                       'الگوهای رفتاری',
+                       'تراکم جمعیت',
+                       'بازه‌های زمانی پرخطر',
+                       'مناطق جغرافیایی پرخطر'
+                   ],
+                   datasets: [{
+                       label: 'میزان تأثیر بر وقوع قتل (شاخص)',
+                       data: [78, 85, 92, 65, 88, 90],
+                       borderWidth: 1,
+                       backgroundColor: '#0033ffbb'
+                   }]
+               },
+               options: {
+                   responsive: true,
+                   scales: {
+                       y: {
+                           beginAtZero: true,
+                           max: 100,
+                           title: {
+                               display: true,
+                               text: 'درصد تأثیر'
+                           }
+                       },
+                       x: {
+                           ticks: {
+                               font: {
+                                   family: 'IRANYekan'
+                               }
+                           }
+                       }
+                   },
+                   plugins: {
+                       legend: {
+                           labels: {
+                               font: {
+                                   family: 'IRANYekan'
+                               }
+                           }
+                       },
+                       tooltip: {
+                           callbacks: {
+                               label: function(context) {
+                                   return context.raw + '٪ میزان تأثیر';
+                               }
+                           }
+                       }
+                   }
+               }
+           });
+
+               const ctx2 = document.getElementById('myChart2');
+
+           const dataValues = [22, 26, 18, 14, 20]; // درصد سهم عوامل
+
+           const chartColors = {
+               economic: 'rgb(255, 99, 132)',   // عوامل اقتصادی
+               social: 'rgb(255, 159, 64)',     // عوامل اجتماعی
+               behavioral: 'rgb(255, 205, 86)', // الگوهای رفتاری
+               temporal: 'rgb(75, 192, 192)',   // بازه‌های زمانی
+               geographic: 'rgb(54, 162, 235)', // مناطق پرخطر
+           };
+
+           new Chart(ctx2, {
+               type: 'doughnut',
+               data: {
+                   labels: [
+                       'عوامل اقتصادی',
+                       'عوامل اجتماعی',
+                       'الگوهای رفتاری',
+                       'بازه‌های زمانی پرخطر',
+                       'مناطق جغرافیایی پرخطر'
+                   ],
+                   datasets: [
+                       {
+                           label: 'سهم عوامل در وقوع قتل (%)',
+                           data: dataValues,
+                           backgroundColor: Object.values(chartColors),
+                           borderWidth: 1
+                       }
+                   ]
+               },
+               options: {
+                   responsive: true,
+                   plugins: {
+                       legend: {
+                           position: 'top',
+                           labels: {
+                               font: {
+                                   family: 'IRANYekan'
+                               }
+                           }
+                       },
+                       title: {
+                           display: true,
+                           text: 'توزیع عوامل مؤثر بر وقوع قتل'
+                       },
+                       tooltip: {
+                           callbacks: {
+                               label: function (context) {
+                                   return context.label + ': ' + context.raw + '٪';
+                               }
+                           }
+                       }
+                   }
+               }
+           });
+
+               const ctx3 = document.getElementById('myChart3');
+
+           // ماه‌ها (قابل تغییر به شمسی در صورت نیاز)
+           const labels = [
+               'فروردین',
+               'اردیبهشت',
+               'خرداد',
+               'تیر',
+               'مرداد'
+           ];
+
+           // داده‌های واقعی (قتل‌های ثبت‌شده)
+           const actualMurders = [42, 55, 68, 74, 61];
+
+           // داده‌های پیش‌بینی‌شده توسط مدل
+           const predictedMurders = [45, 58, 65, 70, 64];
+
+           // رنگ‌ها
+           const colors = {
+               red: 'rgb(255, 99, 132)',   // واقعی
+               blue: 'rgb(54, 162, 235)',  // پیش‌بینی
+           };
+
+           // ساخت رنگ شفاف
+           function transparentize(color, opacity) {
+               return color.replace('rgb', 'rgba').replace(')', `, ${1 - opacity})`);
+           }
+
+           new Chart(ctx3, {
+               type: 'line',
+               data: {
+                   labels: labels,
+                   datasets: [
+                       {
+                           label: 'قتل‌های ثبت‌شده',
+                           data: actualMurders,
+                           borderColor: colors.red,
+                           backgroundColor: transparentize(colors.red, 0.5),
+                           tension: 0.4,
+                           fill: true,
+                       },
+                       {
+                           label: 'قتل‌های پیش‌بینی‌شده',
+                           data: predictedMurders,
+                           borderColor: colors.blue,
+                           backgroundColor: transparentize(colors.blue, 0.5),
+                           tension: 0.4,
+                           fill: true,
+                       }
+                   ]
+               },
+               options: {
+                   responsive: true,
+                   scales: {
+                       y: {
+                           beginAtZero: true,
+                           title: {
+                               display: true,
+                               text: 'تعداد قتل'
+                           }
+                       },
+                       x: {
+                           title: {
+                               display: true,
+                               text: 'ماه'
+                           }
+                       }
+                   },
+                   plugins: {
+                       legend: {
+                           position: 'top',
+                       },
+                       title: {
+                           display: true,
+                           text: 'مقایسه روند واقعی و پیش‌بینی‌شده قتل‌ها'
+                       },
+                       tooltip: {
+                           callbacks: {
+                               label: function (context) {
+                                   return context.dataset.label + ': ' + context.raw + ' مورد';
+                               }
+                           }
+                       }
+                   }
+               },
+           });
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+   
